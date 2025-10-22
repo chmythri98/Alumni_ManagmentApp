@@ -1,0 +1,59 @@
+<div class="dashboard">
+  <!-- Welcome Header -->
+  <div class="header">
+    <h2>Welcome to your Alumni Dashboard 🎓</h2>
+    <p *ngIf="userEmail">Logged in as <strong>{{ userEmail }}</strong></p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <mat-card class="stat-card purple">
+      <mat-icon>star_rate</mat-icon>
+      <h3>Overall Rating</h3>
+      <h1>4.5</h1>
+      <p>+0.3 since last month</p>
+    </mat-card>
+
+    <mat-card class="stat-card green">
+      <mat-icon>group</mat-icon>
+      <h3>Active Alumni</h3>
+      <h1>1,230</h1>
+      <p>↑ 12% new this month</p>
+    </mat-card>
+
+    <mat-card class="stat-card blue">
+      <mat-icon>event</mat-icon>
+      <h3>Upcoming Events</h3>
+      <h1>8</h1>
+      <p>Next: Career Meetup</p>
+    </mat-card>
+
+    <mat-card class="stat-card orange">
+      <mat-icon>cloud_upload</mat-icon>
+      <h3>Files Uploaded</h3>
+      <h1>245</h1>
+      <p>+35 this week</p>
+    </mat-card>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Lower Section -->
+  <div class="lower-section">
+    <mat-card class="wide-card">
+      <h3><mat-icon>notifications_active</mat-icon> Recent Activities</h3>
+      <ul>
+        <li>🎉 New alumni batch added — 2025</li>
+        <li>📁 Uploaded "Event Records.xlsx"</li>
+        <li>💬 5 new messages in Alumni Forum</li>
+      </ul>
+    </mat-card>
+
+    <mat-card class="wide-card">
+      <h3><mat-icon>insert_chart</mat-icon> Engagement Overview</h3>
+      <p>Monthly engagement growth</p>
+      <mat-progress-bar mode="determinate" value="76" color="accent"></mat-progress-bar>
+      <p class="progress-text">76% alumni active this month</p>
+    </mat-card>
+  </div>
+</div>

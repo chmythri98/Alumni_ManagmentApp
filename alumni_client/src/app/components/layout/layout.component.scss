@@ -1,0 +1,72 @@
+.main-container {
+  height: 100vh;
+}
+
+/* 🌈 Sidebar */
+.icon-sidenav {
+  width: 70px;
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+}
+
+.logo img {
+  width: 35px;
+  height: 35px;
+  margin-bottom: 2rem;
+}
+
+.nav-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.nav-icons a {
+  color: #757575;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.nav-icons a.active {
+  background: linear-gradient(145deg, #7b1fa2, #8e24aa);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(142, 36, 170, 0.4);
+}
+
+.nav-icons a:hover {
+  color: #6a1b9a;
+  transform: scale(1.1);
+}
+
+/* 🔝 Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* 📦 Page Content */
+.content {
+  padding: 2rem;
+  background: #f5f6fa;
+  min-height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+/* ✅ Snackbars */
+::ng-deep .logout-snackbar {
+  background-color: #6a1b9a !important;
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+}

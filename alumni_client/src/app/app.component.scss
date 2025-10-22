@@ -1,0 +1,24 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+.active-link {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.content {
+  padding: 2rem;
+}

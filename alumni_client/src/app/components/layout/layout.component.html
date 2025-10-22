@@ -1,0 +1,51 @@
+<mat-sidenav-container class="main-container">
+  <!-- 🌈 Sidebar -->
+  <mat-sidenav mode="side" opened class="icon-sidenav">
+    <div class="logo">
+      <img src="assets/logo.png" alt="logo" />
+    </div>
+
+    <nav class="nav-icons">
+      <a mat-icon-button routerLink="/home" routerLinkActive="active" matTooltip="Home" matTooltipPosition="right">
+        <mat-icon>home</mat-icon>
+      </a>
+
+      <a mat-icon-button routerLink="/upload" routerLinkActive="active" matTooltip="File Upload" matTooltipPosition="right">
+        <mat-icon>cloud_upload</mat-icon>
+      </a>
+
+      <a mat-icon-button routerLink="/dashboard" routerLinkActive="active" matTooltip="Dashboard" matTooltipPosition="right">
+        <mat-icon>dashboard</mat-icon>
+      </a>
+
+      <a mat-icon-button routerLink="/events" routerLinkActive="active" matTooltip="Events & Records" matTooltipPosition="right">
+        <mat-icon>event</mat-icon>
+      </a>
+    </nav>
+  </mat-sidenav>
+
+  <!-- 🌟 Main Content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="toolbar">
+      <span class="page-title">Alumni Connect Portal</span>
+      <span class="spacer"></span>
+
+      <button mat-icon-button matTooltip="Notifications">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Profile">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="logout()" matTooltip="Logout">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- 🧭 Dynamic page content goes here -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
