@@ -1,0 +1,45 @@
+<div class="upload-container">
+  <h2>📤 Upload Student Data to Firestore</h2>
+
+  <input type="file" (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+  <button mat-raised-button color="primary"
+          (click)="uploadToFirestore()"
+          [disabled]="!parsedData.length">
+    Upload to Firebase
+  </button>
+
+  <div *ngIf="parsedData.length">
+    <h3>Preview Data ({{ parsedData.length }} rows)</h3>
+    <table class="preview-table">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Degree</th>
+          <th>Major</th>
+          <th>Email</th>
+          <th>GPA</th>
+          <th>Credits Earned</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of parsedData | slice:0:10">
+          <td>{{ row['Student ID'] }}</td>
+          <td>{{ row['First Name'] }}</td>
+          <td>{{ row['Last Name'] }}</td>
+          <td>{{ row['Degree'] }}</td>
+          <td>{{ row['Major'] }}</td>
+          <td>{{ row['Email'] }}</td>
+          <td>{{ row['GPA'] }}</td>
+          <td>{{ row['Credits Earned'] }}</td>
+          <td>{{ row['Phone'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p *ngIf="uploadMessage" class="message">{{ uploadMessage }}</p>
+</div>

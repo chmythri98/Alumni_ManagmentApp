@@ -1,0 +1,153 @@
+<div class="events-container">
+
+  <h2>🎓 Alumni Events & Analytics Dashboard</h2>
+
+  <!-- ============================================= -->
+  <!-- YEAR FILTER DROPDOWN -->
+  <!-- ============================================= -->
+  <!-- <div class="year-filter">
+    <mat-form-field appearance="outline">
+      <mat-label>Filter By Year</mat-label>
+
+      <mat-select [(value)]="selectedYear" (selectionChange)="filterByYear()">
+        <mat-option value="all">All Years</mat-option>
+        <mat-option *ngFor="let y of availableYears" [value]="y">
+          {{ y }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div> -->
+
+  <!-- ============================================= -->
+  <!-- FILE UPLOAD LOGS TABLE -->
+  <!-- ============================================= -->
+  <mat-card>
+    <h3>📂 Uploaded Files Summary</h3>
+
+    <table mat-table [dataSource]="fileRecords" class="mat-elevation-z2">
+
+      <ng-container matColumnDef="fileName">
+        <th mat-header-cell *matHeaderCellDef>File Name</th>
+        <td mat-cell *matCellDef="let file">{{ file.fileName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="uploadedOn">
+        <th mat-header-cell *matHeaderCellDef>Uploaded On</th>
+        <td mat-cell *matCellDef="let file">{{ file.uploadedOn }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="uploadedBy">
+        <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+        <td mat-cell *matCellDef="let file">{{ file.adminName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="rowsProcessed">
+        <th mat-header-cell *matHeaderCellDef>Rows Processed</th>
+        <td mat-cell *matCellDef="let file"  >{{ file.rowsProcessed }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let file"  [ngClass]="file.status" >{{ file.status }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </mat-card>
+
+  <!-- ============================================= -->
+  <!-- EVENT SUMMARY TABLE -->
+  <!-- ============================================= -->
+  <mat-card>
+    <h3>📅 Event Summary</h3>
+
+    <table mat-table [dataSource]="eventSummaries" class="mat-elevation-z2">
+
+      <ng-container matColumnDef="eventName">
+        <th mat-header-cell *matHeaderCellDef>Event</th>
+        <td mat-cell *matCellDef="let e">{{ e.eventName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="attendees">
+        <th mat-header-cell *matHeaderCellDef>Attendees</th>
+        <td mat-cell *matCellDef="let e">{{ e.attendees }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="speakers">
+        <th mat-header-cell *matHeaderCellDef>Speakers</th>
+        <td mat-cell *matCellDef="let e">{{ e.speakers }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="volunteers">
+        <th mat-header-cell *matHeaderCellDef>Volunteers</th>
+        <td mat-cell *matCellDef="let e">{{ e.volunteers }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef>Location</th>
+        <td mat-cell *matCellDef="let e">{{ e.location }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedEventColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedEventColumns;"></tr>
+
+    </table>
+  </mat-card>
+
+  <!-- ============================================= -->
+  <!-- MAIN CHARTS -->
+  <!-- ============================================= -->
+  <div class="charts">
+
+    <!-- <mat-card>
+      <h3>📊 Alumni Participation by Event</h3>
+      <canvas id="chartEvents"></canvas>
+    </mat-card> -->
+
+    <mat-card>
+      <h3>🧍  Alumni Per Event</h3>
+      <canvas id="chartUnique"></canvas>
+    </mat-card>
+
+    <mat-card>
+      <h3>📍 Event Location Distribution</h3>
+      <canvas id="chartLocations"></canvas>
+    </mat-card>
+
+    <!-- <mat-card>
+      <h3>⭐ Average Feedback Score</h3>
+      <canvas id="chartFeedback"></canvas>
+    </mat-card> -->
+
+    <!-- <mat-card>
+      <h3>🎯 Attendees vs Speakers vs Volunteers</h3>
+      <canvas id="chartParticipation"></canvas>
+    </mat-card> -->
+
+  </div>
+
+  <!-- ============================================= -->
+  <!-- YEAR-BASED ANALYTICS -->
+  <!-- ============================================= -->
+  <div class="charts year-charts">
+
+    <mat-card>
+      <h3>📆 Events Organized Per Year</h3>
+      <canvas id="chartEventsPerYear"></canvas>
+    </mat-card>
+
+    <mat-card>
+      <h3>📈 Total Alumni Participation Per Year</h3>
+      <canvas id="chartAttendeesPerYear"></canvas>
+    </mat-card>
+
+    <mat-card class="full-width-chart">
+      <h3>🗣 Speakers & Volunteers Per Year</h3>
+      <canvas id="chartSVPerYear"></canvas>
+    </mat-card>
+
+  </div>
+
+</div>

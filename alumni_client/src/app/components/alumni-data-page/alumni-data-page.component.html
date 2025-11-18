@@ -1,0 +1,151 @@
+<div class="upload-container">
+  <h2>🎓 GHU Alumni Data Management</h2>
+
+  <mat-card *ngIf="successMessage" class="success-alert">
+    <mat-icon color="primary">check_circle</mat-icon>
+    {{ successMessage }}
+  </mat-card>
+
+  <mat-tab-group>
+    <!-- 📋 View Data Tab -->
+    <mat-tab label="📋 View & Export Data">
+      <div class="table-section">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Search alumni...</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchValue"
+            (input)="applyFilter()"
+            placeholder="Filter by name, major, or company"
+          />
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="exportToExcel()">
+          ⬇️ Export to Excel
+        </button>
+
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+
+            <!-- 🧍 First Name -->
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef>First Name</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['First Name'] || row.firstName }}
+              </td>
+            </ng-container>
+
+            <!-- 👩 Last Name -->
+            <ng-container matColumnDef="lastName">
+              <th mat-header-cell *matHeaderCellDef>Last Name</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Last Name'] || row.lastName }}
+              </td>
+            </ng-container>
+
+               <ng-container matColumnDef="studentID">
+              <th mat-header-cell *matHeaderCellDef>Student ID</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Student ID'] || row.studentID }}
+              </td>
+            </ng-container>
+
+            <!-- 🎓 Graduation Year -->
+            <ng-container matColumnDef="graduationYear">
+              <th mat-header-cell *matHeaderCellDef>Graduation Year</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Graduation Year'] || row.graduationYear }}
+              </td>
+            </ng-container>
+
+            <!-- 🧠 Major -->
+            <ng-container matColumnDef="major">
+              <th mat-header-cell *matHeaderCellDef>Major</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Major'] || row.major }}
+              </td>
+            </ng-container>
+
+            <!-- 🏢 Company -->
+            <ng-container matColumnDef="companyName">
+              <th mat-header-cell *matHeaderCellDef>Company</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Company Name'] || row.company }}
+              </td>
+            </ng-container>
+
+            <!-- 💼 Role -->
+            <ng-container matColumnDef="role">
+              <th mat-header-cell *matHeaderCellDef>Role</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Role'] || row.role }}
+              </td>
+            </ng-container>
+
+            <!-- ✅ Still Working -->
+            <ng-container matColumnDef="stillWorking">
+              <th mat-header-cell *matHeaderCellDef>Still Working</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row['Still Working'] ? 'Yes' : 'No' }}
+              </td>
+            </ng-container>
+
+            <!-- Table rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <!-- ✅ Paginator -->
+          <mat-paginator
+            [length]="dataSource.filteredData.length"
+            [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- 📤 Upload Alumni Data Tab -->
+    <mat-tab label="📤 Upload Alumni Data">
+      <mat-card class="event-form-card">
+        <h3>📅 Event Details</h3>
+        <form #eventForm="ngForm" (ngSubmit)="goToUploadPage()">
+          <mat-form-field appearance="outline">
+            <mat-label>Event Title</mat-label>
+            <input matInput [(ngModel)]="eventTitle" name="eventTitle" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Year</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="eventYear"
+              name="eventYear"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <input
+              matInput
+              [(ngModel)]="eventLocation"
+              name="eventLocation"
+              required
+            />
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!eventForm.valid">
+            Continue to Upload Alumni Data
+          </button>
+        </form>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</div>

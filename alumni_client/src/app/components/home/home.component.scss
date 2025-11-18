@@ -5,6 +5,7 @@
   min-height: calc(100vh - 64px);
 }
 
+/* ===== HEADER ===== */
 .header {
   margin-bottom: 2rem;
   text-align: left;
@@ -20,7 +21,7 @@
   }
 }
 
-/* ====== Stats Cards ====== */
+/* ====== STATS CARDS GRID ====== */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -28,16 +29,36 @@
   margin-bottom: 2rem;
 }
 
+/* ====== CARD BASE DESIGN ====== */
 .stat-card {
   text-align: center;
   padding: 1.5rem;
   border-radius: 12px;
   color: #fff;
   transition: transform 0.3s ease;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+
+  h1 {
+    margin: 0.4rem 0;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  h3 {
+    margin: 0.3rem 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 0.3rem;
+  }
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
 }
 
 .stat-card mat-icon {
@@ -46,16 +67,7 @@
   overflow: visible;
 }
 
-.stat-card h3 {
-  margin: 0.3rem 0;
-  font-weight: 600;
-}
-
-.stat-card p {
-  font-size: 0.9rem;
-}
-
-/* Gradient card colors */
+/* ====== COLOR GRADIENTS ====== */
 .purple {
   background: linear-gradient(135deg, #6a1b9a, #8e24aa);
 }
@@ -72,7 +84,7 @@
   background: linear-gradient(135deg, #ef6c00, #fb8c00);
 }
 
-/* ====== Lower Section ====== */
+/* ===== LOWER SECTION LAYOUT ===== */
 .lower-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -80,10 +92,12 @@
   margin-top: 2rem;
 }
 
+/* ===== WIDE CARD DESIGN ===== */
 .wide-card {
   background-color: #fff;
   border-radius: 12px;
   padding: 1.5rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 
   h3 {
     display: flex;
@@ -92,6 +106,10 @@
     color: #4a148c;
     gap: 0.5rem;
     margin-bottom: 1rem;
+
+    mat-icon {
+      font-size: 20px;
+    }
   }
 
   ul {
@@ -103,6 +121,11 @@
       padding: 0.5rem 0;
       border-bottom: 1px solid #eee;
       font-size: 0.95rem;
+      color: #444;
+
+      &:last-child {
+        border-bottom: none;
+      }
     }
   }
 
@@ -114,10 +137,11 @@
   }
 }
 
-/* ✅ Snackbar */
+/* ===== SUCCESS SNACKBAR ===== */
 ::ng-deep .success-snackbar {
   background-color: #43a047 !important;
-  color: #fff;
+  color: #fff !important;
   font-weight: 500;
   text-align: center;
+  border-radius: 6px;
 }

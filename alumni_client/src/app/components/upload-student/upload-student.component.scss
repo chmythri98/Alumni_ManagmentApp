@@ -1,0 +1,40 @@
+.upload-container {
+  background: #fff;
+  padding: 25px;
+  max-width: 1000px;
+  margin: 40px auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+  h2 {
+    color: #5e35b1;
+    margin-bottom: 16px;
+  }
+
+  input[type="file"] {
+    margin: 12px 0;
+  }
+
+  .preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f6fb;
+  }
+
+  .message {
+    margin-top: 20px;
+    font-weight: 500;
+    color: #333;
+  }
+}

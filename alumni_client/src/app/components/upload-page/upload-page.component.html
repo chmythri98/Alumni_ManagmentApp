@@ -1,0 +1,114 @@
+<!-- Progress Bar -->
+<div class="progress-bar">
+  <div class="step" [class.completed]="step > 0" [class.active]="step === 0">1 Upload file</div>
+  <div class="line" [class.completed]="step > 0"></div>
+
+  <div class="step" [class.completed]="step > 1" [class.active]="step === 1">2 Select header row</div>
+  <div class="line" [class.completed]="step > 1"></div>
+
+  <div class="step" [class.completed]="step > 2" [class.active]="step === 2">3 Match Columns</div>
+  <div class="line" [class.completed]="step > 2"></div>
+
+  <div class="step" [class.completed]="step > 3" [class.active]="step === 3">4 Preview</div>
+  <div class="line" [class.completed]="step > 3"></div>
+
+  <div class="step" [class.active]="step === 4">5 Confirm Upload</div>
+</div>
+
+<!-- STEP 1 -->
+<div *ngIf="step === 0" class="step-container">
+  <mat-card class="upload-card">
+    <div class="upload-content">
+      <h3>📤 Upload Alumni Data</h3>
+      <label class="file-upload-btn">
+        <input type="file" (change)="onFileUpload($event)" accept=".xlsx, .xls" />
+        Choose File
+      </label>
+      <p>Upload Excel file containing alumni details.</p>
+    </div>
+  </mat-card>
+</div>
+
+<!-- STEP 2 -->
+<div *ngIf="step === 1" class="step-container">
+  <h2>🧾 Select Header Row</h2>
+  <div class="table-preview scrollable">
+    <table>
+      <tbody>
+        <tr *ngFor="let row of sheetData; let i = index" [class.selected]="i === selectedHeaderRow" (click)="selectHeaderRow(i)">
+          <td *ngFor="let cell of row">{{ cell }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <button mat-flat-button color="primary" (click)="goToMatchColumns()">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div *ngIf="step === 2" class="step-container">
+  <h2>📋 Match Columns</h2>
+
+  <div class="mapping-section">
+    <div class="mapping-row" *ngFor="let field of requiredFields">
+      <label>{{ field }}</label>
+      <select [(ngModel)]="columnMapping[field]" class="dropdown">
+        <option value="" disabled>Select column…</option>
+        <option *ngFor="let header of headers" [value]="header">{{ header }}</option>
+      </select>
+      <span class="status" [ngClass]="{ matched: columnMapping[field], missing: !columnMapping[field] }">
+        {{ columnMapping[field] ? '✅' : '⚠️' }}
+      </span>
+    </div>
+  </div>
+
+  <button mat-flat-button color="primary" (click)="validateAndPreview()">Next</button>
+</div>
+
+<!-- STEP 4 -->
+<div *ngIf="step === 3" class="step-container">
+  <h2>🔍 Preview Data Before Upload</h2>
+  <p>✅ {{ validatedData.toAdd?.length || 0 }} new alumni will be <b>added</b>.</p>
+  <p>♻️ {{ validatedData.toUpdate?.length || 0 }} existing alumni will be <b>updated</b>.</p>
+
+  <div class="preview-tables">
+    <div class="preview-section">
+      <h3>🆕 To be Added</h3>
+      <div class="table-preview scrollable">
+        <table *ngIf="validatedData.toAdd?.length">
+          <thead>
+            <tr>
+              <th *ngFor="let header of headers">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of validatedData.toAdd.slice(0,10)">
+              <td *ngFor="let key of headers">{{ row[key] }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="!validatedData.toAdd?.length">No new alumni to add.</p>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h3>♻️ To be Updated</h3>
+      <div class="table-preview scrollable">
+        <table *ngIf="validatedData.toUpdate?.length">
+          <thead>
+            <tr>
+              <th *ngFor="let header of headers">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of validatedData.toUpdate.slice(0,10)">
+              <td *ngFor="let key of headers">{{ row[key] }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="!validatedData.toUpdate?.length">No existing alumni found for update.</p>
+      </div>
+    </div>
+  </div>
+
+  <button mat-flat-button color="accent" (click)="finishUpload()">Confirm & Upload</button>
+</div>

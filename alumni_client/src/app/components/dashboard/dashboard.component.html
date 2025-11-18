@@ -1,1 +1,92 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <h2>🎓 Alumni Insights Dashboard</h2>
+
+  <!-- 🔍 FILTERS -->
+  <div class="filters">
+    <!-- Major Filter -->
+    <mat-form-field appearance="outline">
+      <mat-label>Major</mat-label>
+      <mat-select [(ngModel)]="selectedMajor" (selectionChange)="filterData()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let major of majors" [value]="major">
+          {{ major }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Graduation Year Filter -->
+    <mat-form-field appearance="outline">
+      <mat-label>Graduation Year</mat-label>
+      <mat-select [(ngModel)]="selectedYear" (selectionChange)="filterData()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let year of years" [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Company Filter -->
+    <mat-form-field appearance="outline">
+      <mat-label>Company</mat-label>
+      <mat-select [(ngModel)]="selectedCompany" (selectionChange)="filterData()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let company of companies" [value]="company">
+          {{ company }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- 📊 KPI CARDS -->
+  <div class="kpi-grid">
+    <mat-card class="kpi-card total">
+      Total Alumni<br />
+      <b>{{ totalAlumni() }}</b>
+    </mat-card>
+
+    <mat-card class="kpi-card majors">
+      Unique Majors<br />
+      <b>{{ totalMajors() }}</b>
+    </mat-card>
+
+    <mat-card class="kpi-card companies">
+      Total Companies<br />
+      <b>{{ totalCompanies() }}</b>
+    </mat-card>
+
+    <mat-card class="kpi-card roles">
+      Distinct Roles<br />
+      <b>{{ totalRoles() }}</b>
+    </mat-card>
+  </div>
+
+  <!-- 📈 CHARTS -->
+  <div class="charts">
+
+    <mat-card class="chart-card">
+      <h3>📈 Graduation Trends Over Time</h3>
+      <canvas id="gradTrend"></canvas>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <h3>🍩 Major-wise Alumni Distribution</h3>
+      <canvas id="majorPie"></canvas>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <h3>📊 Top Majors by Alumni Count</h3>
+      <canvas id="topMajors"></canvas>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <h3>👩‍💻 Role Distribution Across Majors</h3>
+      <canvas id="roleDist"></canvas>
+    </mat-card>
+
+      <mat-card class="chart-card full-width">
+      <h3>🏢 Top Hiring Companies</h3>
+      <canvas id="topCompanies"></canvas>
+    </mat-card>
+
+  </div>
+</div>

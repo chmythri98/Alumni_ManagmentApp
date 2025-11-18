@@ -1,0 +1,55 @@
+.events-container {
+  padding: 2rem;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+h2 {
+  text-align: center;
+  color: #6a1b9a;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.year-filter {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  mat-form-field {
+    width: 220px;
+  }
+}
+
+mat-card { margin-bottom: 2rem; padding: 1.4rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); h3 { color: #6a1b9a; margin-bottom: 1rem; font-weight: 600; } table { width: 100%; border-collapse: collapse; th { color: #6a1b9a; font-weight: 600; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; } td { font-size: 14px; } td, th { padding: 0.75rem; } tr:nth-child(even) { background: #f3f3f3; } /* Status colors */ /* Status colors */ .Completed { color: #43A047 !important; /* Green */ font-weight: 700; } .Failed { color: #E53935 !important; /* Red */ font-weight: 700; } .Pending { color: #FB8C00 !important; /* Orange */ font-weight: 700; } } }
+
+/* ⚠️ 2 CHARTS PER ROW */
+.charts {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 2rem;
+
+  mat-card {
+    padding: 1.2rem;
+    text-align: center;
+  }
+
+  canvas {
+    width: 100%;
+    max-height: 300px;
+  }
+
+  .full-width-chart {
+  grid-column: span 2; /* takes full row in 2-column layout */
+}
+
+}
+
+
+
+/* 📱 Mobile: 1 chart per row */
+@media (max-width: 768px) {
+  .charts {
+    grid-template-columns: 1fr !important;
+  }
+}

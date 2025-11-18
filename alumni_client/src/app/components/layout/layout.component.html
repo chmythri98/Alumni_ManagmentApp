@@ -1,51 +1,72 @@
-<mat-sidenav-container class="main-container">
-  <!-- 🌈 Sidebar -->
-  <mat-sidenav mode="side" opened class="icon-sidenav">
-    <div class="logo">
-      <img src="assets/logo.png" alt="logo" />
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <!-- <img src="assets/logo.png" alt="Logo" class="logo" />
+      <h2>Alumni360</h2> -->
+       <img src="assets/alumnet-logo_eng.svg" alt="Logo" class="logo" />
     </div>
 
-    <nav class="nav-icons">
-      <a mat-icon-button routerLink="/home" routerLinkActive="active" matTooltip="Home" matTooltipPosition="right">
-        <mat-icon>home</mat-icon>
-      </a>
+    <nav class="nav">
+      <div class="nav-section">
+        <h4>Home</h4>
+        <a routerLink="/home" routerLinkActive="active">
+          <i class="material-icons">home</i>
+          <span>Home</span>
+        </a>
+      </div>
 
-      <a mat-icon-button routerLink="/upload" routerLinkActive="active" matTooltip="File Upload" matTooltipPosition="right">
-        <mat-icon>cloud_upload</mat-icon>
-      </a>
+      <div class="nav-section">
+        <h4>Alumni </h4>
+        <a routerLink="/Alumni Data" routerLinkActive="active">
+          <i class="material-icons">people</i>
+          <span>Alumni Data</span>
+        </a>
+       <p></p>
+        <a routerLink="/Alumni Requests" routerLinkActive="active">
+          <i class="material-icons">mail</i>
+          <span>Alumni Requests</span>
+        </a>
+      </div>
 
-      <a mat-icon-button routerLink="/dashboard" routerLinkActive="active" matTooltip="Dashboard" matTooltipPosition="right">
-        <mat-icon>dashboard</mat-icon>
-      </a>
+      <div class="nav-section">
+        <h4>Dashboard</h4>
+         <a routerLink="/dashboard" routerLinkActive="active">
+          <i class="material-icons">dashboard</i>
+          <span>Dashboard</span>
+        </a>
+        <p></p>
+        <a routerLink="/events" routerLinkActive="active">
+          <i class="material-icons">event</i>
+          <span>Events</span>
+        </a>
+      </div>
 
-      <a mat-icon-button routerLink="/events" routerLinkActive="active" matTooltip="Events & Records" matTooltipPosition="right">
-        <mat-icon>event</mat-icon>
-      </a>
+      <!-- <div class="pro-box">
+        <button class="pro-btn">Upgrade to Pro</button>
+        <p>Get premium dashboard features</p>
+      </div> -->
     </nav>
-  </mat-sidenav>
+  </aside>
 
-  <!-- 🌟 Main Content -->
-  <mat-sidenav-content>
-    <mat-toolbar color="primary" class="toolbar">
-      <span class="page-title">Alumni Connect Portal</span>
-      <span class="spacer"></span>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <header class="navbar">
+      <div class="left-actions">
+        <h2>Alumni Management Portal</h2>
+      </div>
 
-      <button mat-icon-button matTooltip="Notifications">
-        <mat-icon>notifications</mat-icon>
-      </button>
+      <div class="right-actions">
+        <i class="material-icons" matTooltip="Notifications">notifications</i>
+        <i class="material-icons" matTooltip="Profile">account_circle</i>
+        <i class="material-icons" matTooltip="Logout" (click)="logout()">logout</i>
+      </div>
+    </header>
 
-      <button mat-icon-button matTooltip="Profile">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="logout()" matTooltip="Logout">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </mat-toolbar>
-
-    <!-- 🧭 Dynamic page content goes here -->
-    <div class="content">
+    <!-- Router Content -->
+    <main class="content">
       <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </main>
+  </div>
+</div>

@@ -1,72 +1,200 @@
-.main-container {
+$app-primary: #5e35b1;
+$app-light: #f4f6fb;
+
+/* Prevent global browser scroll */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* ✅ hides window scrollbars */
+  font-family: 'Inter', sans-serif;
+}
+
+.app-layout {
+  display: flex;
   height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
-/* 🌈 Sidebar */
-.icon-sidenav {
-  width: 70px;
-  background: #ffffff;
-  border-right: 1px solid #e0e0e0;
+/* Sidebar (Fixed) */
+.sidebar {
+  width: 250px;
+  background: white;
+  border-right: 1px solid #eaeaea;
+  padding: 20px 15px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 1rem;
+  justify-content: space-between;
+  z-index: 100;
+  overflow-y: auto; /* keep sidebar scrollable if needed */
 }
 
-.logo img {
-  width: 35px;
-  height: 35px;
-  margin-bottom: 2rem;
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #d1c4e9;
+  border-radius: 10px;
 }
 
-.nav-icons {
+/* Sidebar Header */
+.sidebar .sidebar-header {
   display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+
+  .logo {
+     width: 130px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  h2 {
+    color: $app-primary;
+    font-size: 18px;
+    font-weight: 600;
+  }
 }
 
-.nav-icons a {
-  color: #757575;
-  transition: all 0.3s ease;
+/* Sidebar Navigation */
+.sidebar .nav {
+  flex-grow: 1;
+
+  .nav-section {
+    margin-bottom: 20px;
+
+    h4 {
+      color: #aaa;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #555;
+      text-decoration: none;
+      transition: 0.2s;
+
+      &:hover,
+      &.active {
+        background: #ede7f6;
+        color: $app-primary;
+      }
+
+      i {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+/* Pro Box */
+.sidebar .pro-box {
+  text-align: center;
+  background: linear-gradient(135deg, #6a1b9a, #7b1fa2);
+  color: white;
   border-radius: 12px;
-  padding: 0.5rem;
+  padding: 12px;
+  margin-top: 10px;
+
+  .pro-btn {
+    background: white;
+    border: none;
+    color: #6a1b9a;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  p {
+    font-size: 11px;
+    margin-top: 6px;
+    opacity: 0.8;
+  }
 }
 
-.nav-icons a.active {
-  background: linear-gradient(145deg, #7b1fa2, #8e24aa);
-  color: #fff;
-  box-shadow: 0 3px 10px rgba(142, 36, 170, 0.4);
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  margin-left: 250px; /* Space for fixed sidebar */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* ✅ prevent main scroll */
 }
 
-.nav-icons a:hover {
-  color: #6a1b9a;
-  transform: scale(1.1);
-}
-
-/* 🔝 Toolbar */
-.toolbar {
+/* Top Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 10px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
-  padding: 0 1rem;
+  align-items: center;
+  z-index: 99;
+
+  .left-actions h2 {
+    color: $app-primary;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .right-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    i {
+      font-size: 22px;
+      color: $app-primary;
+      background: #ede7f6;
+      border-radius: 50%;
+      padding: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #d1c4e9;
+      }
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid #7e57c2;
+      cursor: pointer;
+    }
+  }
 }
 
-.spacer {
-  flex: 1 1 auto;
-}
-
-/* 📦 Page Content */
+/* Page Content (inner scroll only) */
 .content {
-  padding: 2rem;
-  background: #f5f6fa;
-  min-height: calc(100vh - 64px);
+  flex-grow: 1;
+  height: calc(100vh - 70px); /* adjust for navbar height */
   overflow-y: auto;
+  background: $app-light;
+  padding: 20px 40px;
 }
 
-/* ✅ Snackbars */
-::ng-deep .logout-snackbar {
-  background-color: #6a1b9a !important;
-  color: #fff;
-  font-weight: 500;
-  text-align: center;
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+.content::-webkit-scrollbar-thumb {
+  background-color: #d1c4e9;
+  border-radius: 10px;
 }

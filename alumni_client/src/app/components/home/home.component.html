@@ -1,59 +1,112 @@
 <div class="dashboard">
-  <!-- Welcome Header -->
+
+  <!-- Header -->
   <div class="header">
     <h2>Welcome to your Alumni Dashboard 🎓</h2>
-    <p *ngIf="userEmail">Logged in as <strong>{{ userEmail }}</strong></p>
+    <p *ngIf="userEmail">
+      Logged in as <strong>{{ userEmail }}</strong>
+    </p>
   </div>
 
-  <!-- Stats Cards -->
+  <!-- =======================
+        KPI STAT CARDS
+  ======================== -->
   <div class="stats-grid">
+
+    <!-- Active Admins -->
     <mat-card class="stat-card purple">
-      <mat-icon>star_rate</mat-icon>
-      <h3>Overall Rating</h3>
-      <h1>4.5</h1>
-      <p>+0.3 since last month</p>
-    </mat-card>
-
-    <mat-card class="stat-card green">
       <mat-icon>group</mat-icon>
-      <h3>Active Alumni</h3>
-      <h1>1,230</h1>
-      <p>↑ 12% new this month</p>
+      <h3>Active Admins</h3>
+      <h1>{{ activeAdmins }}</h1>
+      <p>{{ activeAdmins }} admins currently active</p>
     </mat-card>
 
+    <!-- Active Alumni This Month -->
+    <!-- <mat-card class="stat-card green">
+      <mat-icon>star_rate</mat-icon>
+      <h3>Active Alumni</h3>
+      <h1>{{ activeAlumniThisMonth }}</h1>
+      <p>Alumni active this month</p>
+    </mat-card> -->
+
+    <!-- Most Recent Graduation Year -->
     <mat-card class="stat-card blue">
       <mat-icon>event</mat-icon>
-      <h3>Upcoming Events</h3>
-      <h1>8</h1>
-      <p>Next: Career Meetup</p>
+      <h3>Recent Graduation Year</h3>
+      <h1>{{ recentGradYear }}</h1>
+      <p>Latest batch recorded</p>
     </mat-card>
 
+    <!-- Total Files Uploaded -->
     <mat-card class="stat-card orange">
       <mat-icon>cloud_upload</mat-icon>
       <h3>Files Uploaded</h3>
-      <h1>245</h1>
-      <p>+35 this week</p>
+      <h1>{{ totalFilesUploaded }}</h1>
+      <p>Total upload logs</p>
     </mat-card>
+
   </div>
 
   <mat-divider></mat-divider>
 
-  <!-- Lower Section -->
+  <!-- =======================
+        LOWER SECTION
+  ======================== -->
   <div class="lower-section">
+
+    <!-- RECENT ACTIVITIES -->
     <mat-card class="wide-card">
-      <h3><mat-icon>notifications_active</mat-icon> Recent Activities</h3>
+      <h3>
+        <mat-icon>notifications_active</mat-icon>
+        Recent Activities
+      </h3>
+
       <ul>
-        <li>🎉 New alumni batch added — 2025</li>
-        <li>📁 Uploaded "Event Records.xlsx"</li>
-        <li>💬 5 new messages in Alumni Forum</li>
+
+        <!-- Latest Alumni Batch -->
+        <li *ngIf="latestBatchYear">
+          🎓 New alumni batch added — <strong>{{ latestBatchYear }}</strong>
+        </li>
+
+        <!-- Latest File Upload -->
+        <li *ngIf="latestFileName">
+          📁 Uploaded <strong>“{{ latestFileName }}”</strong>
+        </li>
+
+        <!-- Most Recent Alumni Form Request -->
+        <li *ngIf="latestFormRequest">
+          📝 Recent alumni update request submitted by
+          <strong>{{ latestFormRequest['First Name'] }} {{ latestFormRequest['Last Name'] }}</strong>
+        </li>
+
+        <!-- Pending Requests Count -->
+        <li>
+          ⏳ <strong>{{ pendingRequests }}</strong> requests pending review
+        </li>
       </ul>
     </mat-card>
 
-    <mat-card class="wide-card">
-      <h3><mat-icon>insert_chart</mat-icon> Engagement Overview</h3>
-      <p>Monthly engagement growth</p>
-      <mat-progress-bar mode="determinate" value="76" color="accent"></mat-progress-bar>
-      <p class="progress-text">76% alumni active this month</p>
-    </mat-card>
+    <!-- ENGAGEMENT OVERVIEW -->
+    <!-- <mat-card class="wide-card">
+      <h3>
+        <mat-icon>insert_chart</mat-icon>
+        Engagement Overview
+      </h3>
+
+      <p>Monthly alumni engagement</p>
+
+     
+      <mat-progress-bar
+        mode="determinate"
+        [value]="(activeAlumniThisMonth / (activeAdmins || 1)) * 100"
+        color="accent">
+      </mat-progress-bar>
+
+      <p class="progress-text">
+        {{ ((activeAlumniThisMonth / (activeAdmins || 1)) * 100 | number:'1.0-0') }}% engagement
+      </p>
+    </mat-card> -->
+
   </div>
+
 </div>
