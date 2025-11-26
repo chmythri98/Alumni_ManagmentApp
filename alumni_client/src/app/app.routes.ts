@@ -12,6 +12,8 @@ import { EventsPageComponent } from './components/events-page/events-page.compon
 import { AlumniDataPageComponent } from './components/alumni-data-page/alumni-data-page.component';
 import { AlumniRequestsComponent } from './components/alumni-requests/alumni-requests.component';
 import { UploadStudentComponent } from './components/upload-student/upload-student.component';
+import { FileEventPageComponent } from './components/file-event-page/file-event-page.component';
+import { UpdateEventAlumniComponent } from './components/update-event-alumni/update-event-alumni.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,8 +30,10 @@ export const routes: Routes = [
       { path: 'Alumni Requests', component: AlumniRequestsComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'events', component: EventsPageComponent },
+      {path :'File Uploads', component: FileEventPageComponent},
       {path: 'upload', component: UploadPageComponent},
-      {path: 'student-upload', component: UploadStudentComponent}
+      {path: 'student-upload', component: UploadStudentComponent},
+      { path: 'update-event', component: UpdateEventAlumniComponent }
 
     ]
   },

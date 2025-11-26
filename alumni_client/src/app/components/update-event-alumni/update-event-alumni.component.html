@@ -1,0 +1,25 @@
+<div class="sync-container">
+  <h2>🔄 Sync Event Alumni with Student Details</h2>
+  <p>
+    This will update <strong>event_alumni</strong> by adding student data from the
+    <strong>alumni</strong> collection (studentName, graduationYear, major, degree).
+  </p>
+
+  <button mat-raised-button color="primary"
+          (click)="syncEventDataOnce()"
+          [disabled]="isLoading">
+    {{ isLoading ? "Processing..." : "Run Sync" }}
+  </button>
+
+  <button mat-stroked-button color="warn"
+          *ngIf="isLoading"
+          (click)="cancelSync()">
+    ⏹ Stop Sync
+  </button>
+
+  <div *ngIf="updatedCount > 0 && !isLoading" class="result">
+    ✔ {{ updatedCount }} event records updated successfully!
+  </div>
+
+  <mat-spinner *ngIf="isLoading" style="margin-top: 20px;"></mat-spinner>
+</div>

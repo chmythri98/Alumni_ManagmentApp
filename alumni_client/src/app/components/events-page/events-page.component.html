@@ -2,112 +2,71 @@
 
   <h2>🎓 Alumni Events & Analytics Dashboard</h2>
 
-  <!-- ============================================= -->
-  <!-- YEAR FILTER DROPDOWN -->
-  <!-- ============================================= -->
-  <!-- <div class="year-filter">
+  <!-- FILTER BAR -->
+  <div class="filters">
+    <!-- Year Filter -->
     <mat-form-field appearance="outline">
-      <mat-label>Filter By Year</mat-label>
-
-      <mat-select [(value)]="selectedYear" (selectionChange)="filterByYear()">
-        <mat-option value="all">All Years</mat-option>
-        <mat-option *ngFor="let y of availableYears" [value]="y">
-          {{ y }}
-        </mat-option>
+      <mat-label>Year</mat-label>
+      <mat-select [(value)]="filterYear" (selectionChange)="onFiltersChanged()">
+        <mat-option value="all">All</mat-option>
+        <mat-option *ngFor="let y of availableYears" [value]="y">{{ y }}</mat-option>
       </mat-select>
     </mat-form-field>
-  </div> -->
 
-  <!-- ============================================= -->
-  <!-- FILE UPLOAD LOGS TABLE -->
-  <!-- ============================================= -->
-  <mat-card>
-    <h3>📂 Uploaded Files Summary</h3>
+    <!-- Location Filter -->
+    <mat-form-field appearance="outline">
+      <mat-label>Location</mat-label>
+      <mat-select [(value)]="filterLocation" (selectionChange)="onFiltersChanged()">
+        <mat-option value="all">All</mat-option>
+        <mat-option *ngFor="let l of availableLocations" [value]="l">{{ l }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <table mat-table [dataSource]="fileRecords" class="mat-elevation-z2">
+    <!-- Graduation Year Filter -->
+    <mat-form-field appearance="outline">
+      <mat-label>Graduation Year</mat-label>
+      <mat-select [(value)]="filterGradYear" (selectionChange)="onFiltersChanged()">
+        <mat-option value="all">All</mat-option>
+        <mat-option *ngFor="let g of availableGradYears" [value]="g">{{ g }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-      <ng-container matColumnDef="fileName">
-        <th mat-header-cell *matHeaderCellDef>File Name</th>
-        <td mat-cell *matCellDef="let file">{{ file.fileName }}</td>
-      </ng-container>
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <mat-card class="kpi purple">
+      <div class="text">
+        <h4>Total Events</h4>
+        <h2>{{ kpiTotalEvents }}</h2>
+      </div>
+    </mat-card>
 
-      <ng-container matColumnDef="uploadedOn">
-        <th mat-header-cell *matHeaderCellDef>Uploaded On</th>
-        <td mat-cell *matCellDef="let file">{{ file.uploadedOn }}</td>
-      </ng-container>
+    <mat-card class="kpi blue">
+      <div class="text">
+        <h4>Total Attendees</h4>
+        <h2>{{ kpiTotalAttendees }}</h2>
+      </div>
+    </mat-card>
 
-      <ng-container matColumnDef="uploadedBy">
-        <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
-        <td mat-cell *matCellDef="let file">{{ file.adminName }}</td>
-      </ng-container>
+    <mat-card class="kpi green">
+      <div class="text">
+        <h4>Unique Alumni</h4>
+        <h2>{{ kpiUniqueAlumni }}</h2>
+      </div>
+    </mat-card>
 
-      <ng-container matColumnDef="rowsProcessed">
-        <th mat-header-cell *matHeaderCellDef>Rows Processed</th>
-        <td mat-cell *matCellDef="let file"  >{{ file.rowsProcessed }}</td>
-      </ng-container>
+    <mat-card class="kpi orange">
+      <div class="text">
+        <h4>Top Event</h4>
+        <p>{{ kpiTopEvent }}</p>
+      </div>
+    </mat-card>
+  </div>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let file"  [ngClass]="file.status" >{{ file.status }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
-  </mat-card>
-
-  <!-- ============================================= -->
-  <!-- EVENT SUMMARY TABLE -->
-  <!-- ============================================= -->
-  <mat-card>
-    <h3>📅 Event Summary</h3>
-
-    <table mat-table [dataSource]="eventSummaries" class="mat-elevation-z2">
-
-      <ng-container matColumnDef="eventName">
-        <th mat-header-cell *matHeaderCellDef>Event</th>
-        <td mat-cell *matCellDef="let e">{{ e.eventName }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="attendees">
-        <th mat-header-cell *matHeaderCellDef>Attendees</th>
-        <td mat-cell *matCellDef="let e">{{ e.attendees }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="speakers">
-        <th mat-header-cell *matHeaderCellDef>Speakers</th>
-        <td mat-cell *matCellDef="let e">{{ e.speakers }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="volunteers">
-        <th mat-header-cell *matHeaderCellDef>Volunteers</th>
-        <td mat-cell *matCellDef="let e">{{ e.volunteers }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="location">
-        <th mat-header-cell *matHeaderCellDef>Location</th>
-        <td mat-cell *matCellDef="let e">{{ e.location }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedEventColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedEventColumns;"></tr>
-
-    </table>
-  </mat-card>
-
-  <!-- ============================================= -->
-  <!-- MAIN CHARTS -->
-  <!-- ============================================= -->
+  <!-- MAIN CHARTS (2 per row) -->
   <div class="charts">
-
-    <!-- <mat-card>
-      <h3>📊 Alumni Participation by Event</h3>
-      <canvas id="chartEvents"></canvas>
-    </mat-card> -->
-
     <mat-card>
-      <h3>🧍  Alumni Per Event</h3>
+      <h3>🧍 Alumni Per Event</h3>
       <canvas id="chartUnique"></canvas>
     </mat-card>
 
@@ -116,38 +75,91 @@
       <canvas id="chartLocations"></canvas>
     </mat-card>
 
-    <!-- <mat-card>
-      <h3>⭐ Average Feedback Score</h3>
-      <canvas id="chartFeedback"></canvas>
-    </mat-card> -->
-
-    <!-- <mat-card>
+    <mat-card>
       <h3>🎯 Attendees vs Speakers vs Volunteers</h3>
       <canvas id="chartParticipation"></canvas>
-    </mat-card> -->
-
-  </div>
-
-  <!-- ============================================= -->
-  <!-- YEAR-BASED ANALYTICS -->
-  <!-- ============================================= -->
-  <div class="charts year-charts">
+    </mat-card>
 
     <mat-card>
       <h3>📆 Events Organized Per Year</h3>
       <canvas id="chartEventsPerYear"></canvas>
     </mat-card>
+  </div>
 
+  <!-- YEAR-BASED CHARTS -->
+  <div class="charts year-charts">
     <mat-card>
       <h3>📈 Total Alumni Participation Per Year</h3>
       <canvas id="chartAttendeesPerYear"></canvas>
     </mat-card>
 
-    <mat-card class="full-width-chart">
-      <h3>🗣 Speakers & Volunteers Per Year</h3>
+    <mat-card>
+      <h3>🗣 Speakers vs Volunteers vs Attendees Per Year</h3>
       <canvas id="chartSVPerYear"></canvas>
     </mat-card>
-
   </div>
+
+  <!-- 🔮 PREDICTIVE ANALYSIS SECTION -->
+  <mat-card class="prediction-card">
+    <h2>🔮 Predictive Analysis</h2>
+
+    <mat-accordion multi>
+
+      <!-- Q1: Locations -->
+      <mat-expansion-panel (opened)="renderPredictionCharts('p1')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Which event locations are likely to attract the most alumni next year?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="prediction-charts">
+          <canvas id="forecastp1"></canvas>
+          <canvas id="trendp1"></canvas>
+        </div>
+
+        <p class="prediction-text">
+          {{ predictionTextP1 }}
+        </p>
+      </mat-expansion-panel>
+
+      <!-- Q2: Graduation Batches -->
+      <mat-expansion-panel (opened)="renderPredictionCharts('p2')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Which graduation batches are expected to engage more in upcoming events?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="prediction-charts">
+          <canvas id="forecastp2"></canvas>
+          <canvas id="trendp2"></canvas>
+        </div>
+
+        <p class="prediction-text">
+          {{ predictionTextP2 }}
+        </p>
+      </mat-expansion-panel>
+
+      <!-- Q3: Overall Growth -->
+      <mat-expansion-panel (opened)="renderPredictionCharts('p3')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Will overall alumni participation continue to grow over the next 3 years?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="prediction-charts">
+          <canvas id="forecastp3"></canvas>
+          <canvas id="trendp3"></canvas>
+        </div>
+
+        <p class="prediction-text">
+          {{ predictionTextP3 }}
+        </p>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </mat-card>
 
 </div>

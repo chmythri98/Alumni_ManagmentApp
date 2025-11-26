@@ -80,3 +80,69 @@ h2 {
     width: 100%;
   }
 }
+
+.predict-card {
+  margin-top: 2.5rem;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  animation: fadeIn 0.4s ease;
+}
+
+.predict-card h2 {
+  text-align: center;
+  margin-bottom: 1.6rem;
+  font-weight: 700;
+  color: #6a1b9a;
+}
+
+/* Accordion styling */
+mat-expansion-panel {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+mat-expansion-panel-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4b1a6a;
+  background: #f5ecff;
+}
+
+mat-panel-title {
+  font-weight: 600;
+}
+
+/* Side-by-side predictive charts */
+.predict-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 1.4rem;
+  margin: 1.4rem 0;
+}
+
+.predict-charts canvas {
+  width: 100% !important;
+  max-height: 360px;
+}
+
+/* Insights text */
+.prediction-text {
+  margin-top: 1rem;
+  font-size: 1rem;
+  padding: 0.6rem 0.2rem;
+  color: #3a3a3a;
+  border-left: 4px solid #6a1b9a;
+  padding-left: 12px;
+  line-height: 1.55rem;
+  background: #faf6ff;
+}
+
+/* Smooth animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

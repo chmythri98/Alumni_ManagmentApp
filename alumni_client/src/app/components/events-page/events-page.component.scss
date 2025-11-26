@@ -2,54 +2,141 @@
   padding: 2rem;
   background: #fafafa;
   min-height: 100vh;
+  width: 100%;
 }
 
 h2 {
   text-align: center;
   color: #6a1b9a;
-  margin-bottom: 2rem;
   font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
-.year-filter {
+/* FILTERS */
+.filters {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+
   mat-form-field {
     width: 220px;
   }
 }
 
-mat-card { margin-bottom: 2rem; padding: 1.4rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); h3 { color: #6a1b9a; margin-bottom: 1rem; font-weight: 600; } table { width: 100%; border-collapse: collapse; th { color: #6a1b9a; font-weight: 600; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; } td { font-size: 14px; } td, th { padding: 0.75rem; } tr:nth-child(even) { background: #f3f3f3; } /* Status colors */ /* Status colors */ .Completed { color: #43A047 !important; /* Green */ font-weight: 700; } .Failed { color: #E53935 !important; /* Red */ font-weight: 700; } .Pending { color: #FB8C00 !important; /* Orange */ font-weight: 700; } } }
+/* KPI CARD GRID */
+.kpi-grid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
 
-/* ⚠️ 2 CHARTS PER ROW */
+.kpi {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  border-radius: 12px;
+  padding: 1rem;
+  color: #fff;
+  text-align: center;
+}
+
+.kpi .text h4 {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.85;
+  color: #ffffff;
+}
+
+.kpi .text h2 {
+  margin: 4px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* KPI Colors */
+.purple { background: #6a1b9a; }
+.blue   { background: #039BE5; }
+.green  { background: #2E7D32; }
+.orange { background: #FB8C00; }
+
+/* CHARTS GRID */
 .charts {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.8rem;
+  justify-items: center;
+  width: 100%;
   margin-bottom: 2rem;
 
   mat-card {
+    width: 100%;
+    max-width: 700px;
     padding: 1.2rem;
+    border-radius: 12px;
+  }
+
+  h3 {
+    color: #6a1b9a;
     text-align: center;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
   }
 
   canvas {
     width: 100%;
-    max-height: 300px;
+    max-height: 320px;
   }
-
-  .full-width-chart {
-  grid-column: span 2; /* takes full row in 2-column layout */
 }
 
+/* YEAR CHARTS use same grid but separated semantically */
+.year-charts {
+  margin-top: 0.5rem;
 }
 
+/* 🔮 PREDICTIVE SECTION */
+.prediction-card {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
 
+  h2 {
+    color: #6a1b9a;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.2rem;
+  }
+}
 
-/* 📱 Mobile: 1 chart per row */
-@media (max-width: 768px) {
+.prediction-charts {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+
+  canvas {
+    width: 420px;
+    max-height: 280px;
+  }
+}
+
+.prediction-text {
+  margin-top: 1rem;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 950px) {
   .charts {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 }

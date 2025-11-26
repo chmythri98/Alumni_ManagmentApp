@@ -162,91 +162,113 @@ export class UploadPageComponent {
   }
 
   /** STEP 5: Final upload */
-  async finishUpload() {
-    try {
-      const db = getFirestore();
-      const alumniCollection = collection(db, 'alumni');
-      const eventCollection = collection(db, 'events');
-      const eventAlumniCollection = collection(db, 'event_alumni');
-      const logsCollection = collection(db, 'file_upload_logs');
+ /** STEP 5: Final upload */
+async finishUpload() {
+  try {
+    const db = getFirestore();
+    const alumniCollection = collection(db, 'alumni');
+    const eventCollection = collection(db, 'events');
+    const eventAlumniCollection = collection(db, 'event_alumni');
+    const logsCollection = collection(db, 'file_upload_logs');
 
-      const logRef = await addDoc(logsCollection, {
-        adminId: 'juGmZthJfxRXnqO4CR1GGQQlTff1',
-        fileName: this.fileName,
-        status: 'Processing',
-        rowsProcessed: 0,
-        timeUploaded: serverTimestamp(),
-      });
+    // Log the start
+    const logRef = await addDoc(logsCollection, {
+      adminId: 'juGmZthJfxRXnqO4CR1GGQQlTff1',
+      fileName: this.fileName,
+      status: 'Processing',
+      rowsProcessed: 0,
+      timeUploaded: serverTimestamp(),
+    });
 
-      const eventId = `EVT${this.eventYear}${this.eventTitle.replace(/\s+/g, '').toUpperCase().slice(0, 6)}${Math.floor(Math.random() * 1000)
-        .toString()
-        .padStart(2, '0')}`;
+    // Generate event ID (e.g., EVT2024ALUMNI01)
+    const eventId = `EVT${this.eventYear}${this.eventTitle.replace(/\s+/g, '').toUpperCase().slice(0, 6)}${Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(2, '0')}`;
 
-      const allRecords = [...this.validatedData.toAdd, ...this.validatedData.toUpdate];
-      let updatedCount = 0;
+    const allRecords = [...this.validatedData.toAdd, ...this.validatedData.toUpdate];
+    let updatedCount = 0;
 
-      this.router.navigate(['/Alumni Data'], {
-        state: { alertMessage: `${this.fileName} is being processed...` },
-      });
+    this.router.navigate(['/Alumni Data'], {
+      state: { alertMessage: `${this.fileName} is being processed...` },
+    });
 
-      for (const record of allRecords) {
-        const studentId = record['Student ID'];
+    for (const record of allRecords) {
+      const studentId = record['Student ID'];
+      const q = query(alumniCollection, where('Student ID', '==', studentId));
+      const snapshot = await getDocs(q);
 
-        const q = query(alumniCollection, where('Student ID', '==', studentId));
-        const snapshot = await getDocs(q);
+      let graduationYear: number | null = null;
+      let major: string | null = null;
 
-        if (!snapshot.empty) {
-          const docRef = snapshot.docs[0].ref;
-          await updateDoc(docRef, {
-            ...record,
-            linkedURL: `https://yourapp.com/alumni/${studentId}`,
-            lastUpdated: new Date(),
-          });
-        } else {
-          await addDoc(alumniCollection, {
-            ...record,
-            linkedURL: `https://yourapp.com/alumni/${studentId}`,
-            createdAt: new Date(),
-          });
-        }
+      if (!snapshot.empty) {
+        // 🔹 Update existing alumni
+        const docRef = snapshot.docs[0].ref;
+        const existing = snapshot.docs[0].data();
 
-        await addDoc(eventAlumniCollection, {
-          eventId,
-          studentId,
-          attended: true,
-          feedbackScore: Math.floor(Math.random() * 5) + 1,
-          timestamp: new Date(),
+        graduationYear = existing['Graduation Year'] || record['Graduation Year'] || null;
+        major = existing['Major'] || record['Major'] || null;
+
+        await updateDoc(docRef, {
+          ...record,
+          linkedURL: `https://yourapp.com/alumni/${studentId}`,
+          lastUpdated: new Date(),
         });
+      } else {
+        // 🔹 Add new alumni
+        graduationYear = record['Graduation Year'] || null;
+        major = record['Major'] || null;
 
-        updatedCount++;
+        await addDoc(alumniCollection, {
+          ...record,
+          linkedURL: `https://yourapp.com/alumni/${studentId}`,
+          createdAt: new Date(),
+        });
       }
 
-      await addDoc(eventCollection, {
+      // 🔹 Add event_alumni link document with extra fields
+      await addDoc(eventAlumniCollection, {
         eventId,
-        eventTitle: this.eventTitle,
-        location: this.eventLocation,
-        year: this.eventYear,
-        eventDate: new Date(),
-        totalAttendees: allRecords.length,
-        totalVolunteers: Math.floor(allRecords.length * 0.1),
-        totalSpeakers: Math.floor(allRecords.length * 0.05),
-        createdAt: new Date(),
+        studentId,
+        graduationYear: graduationYear ? Number(graduationYear) : null,
+        major: major || '',
+        attended: true,
+        feedbackScore: Math.floor(Math.random() * 5) + 1,
+        timestamp: new Date(),
       });
-
-      await updateDoc(logRef, {
-        status: 'Completed',
-        rowsProcessed: allRecords.length,
-      });
-
-      this.snackBar.open(`✅ ${this.fileName} processed successfully`, 'Close', { duration: 3000 });
-    } catch (error) {
-      console.error('Upload error:', error);
-      this.snackBar.open('❌ Upload failed. Check console for details.', 'Close', {
-        duration: 4000,
-        panelClass: ['error-snackbar'],
-      });
+      updatedCount++;
     }
+
+    // 🔹 Add event summary
+    await addDoc(eventCollection, {
+      eventId,
+      eventTitle: this.eventTitle,
+      location: this.eventLocation,
+      year: this.eventYear,
+      eventDate: new Date(),
+      totalAttendees: allRecords.length,
+      totalVolunteers: Math.floor(allRecords.length * 0.1),
+      totalSpeakers: Math.floor(allRecords.length * 0.05),
+      createdAt: new Date(),
+    });
+
+    // 🔹 Update log status
+    await updateDoc(logRef, {
+      status: 'Completed',
+      rowsProcessed: allRecords.length,
+    });
+
+    this.snackBar.open(`✅ ${this.fileName} processed successfully`, 'Close', {
+      duration: 3000,
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    this.snackBar.open('❌ Upload failed. Check console for details.', 'Close', {
+      duration: 4000,
+      panelClass: ['error-snackbar'],
+    });
   }
+}
+
 
   resetFlow() {
     this.step = 0;

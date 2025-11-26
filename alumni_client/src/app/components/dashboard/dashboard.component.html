@@ -88,5 +88,80 @@
       <canvas id="topCompanies"></canvas>
     </mat-card>
 
+     <mat-card class="chart-card full-width">
+      <h3>🏢 Alumni Company Spread</h3>
+      <canvas id="alumniLocation"></canvas>
+    </mat-card>
+
   </div>
+
+  <!-- 🔮 Predictive Analysis Section -->
+<mat-card class="predict-card full-width">
+  <h2>🔮 Predictive Analysis</h2>
+
+  <mat-accordion multi>
+
+    <!-- 1️⃣ Prediction Question -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Which companies are most likely to hire GHU alumni next year?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <!-- Two forecast charts -->
+      <div class="predict-charts">
+        <canvas id="forecastTopCompanies"></canvas>
+        <canvas id="trendTopCompanies"></canvas>
+      </div>
+
+      <!-- Textual insight -->
+      <!-- <div class="prediction-text">
+        <p>Based on historical placement trends, the hiring demand for these companies is projected to grow. Google and Microsoft show an upward hiring curve, while IBM is stabilizing. Amazon shows a mild decline compared to 2023–24.</p>
+      </div> -->
+      <div class="prediction-text">
+        <p>{{ companyPredictionText }}</p>
+      </div>
+
+    </mat-expansion-panel>
+
+    <!-- 2️⃣ Prediction Question -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Which majors are expected to have the highest employment success next year?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="predict-charts">
+        <canvas id="forecastMajorEmployment"></canvas>
+        <canvas id="trendMajorEmployment"></canvas>
+      </div>
+
+      <div class="prediction-text">
+        <p>{{ majorPredictionText }}</p>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- 3️⃣ Prediction Question -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          What cities will alumni most likely work in next year?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="predict-charts">
+        <canvas id="forecastLocations"></canvas>
+        <canvas id="trendLocations"></canvas>
+      </div>
+
+      <div class="prediction-text">
+        <p>{{ companyPredictionText }}</p>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</mat-card>
+
 </div>
