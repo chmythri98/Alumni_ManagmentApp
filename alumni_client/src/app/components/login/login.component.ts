@@ -69,4 +69,31 @@ export class LoginComponent {
       this.loading = false;
     }
   }
+
+  async guestLogin() {
+  this.loading = true;
+
+  try {
+    await this.auth.guestLogin();
+
+    this.snackBar.open('👋 Logged in as Guest! Enjoy browsing.', 'Close', {
+      duration: 4000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      panelClass: ['success-snackbar']
+    });
+
+    this.router.navigate(['/dashboard']);
+  } catch (err: any) {
+    this.snackBar.open('❌ Guest login failed.', 'Close', {
+      duration: 4000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      panelClass: ['error-snackbar']
+    });
+  } finally {
+    this.loading = false;
+  }
+}
+
 }

@@ -233,123 +233,167 @@ export class DashboardComponent implements OnInit {
     this.renderPredictTopLocations();
   }
  
-
 renderPredictTopCompanies() {
   const comp = this.countBy('Company Name');
-  const sorted = Object.entries(comp).sort((a, b) => b[1] - a[1]);
-  const labels = sorted.map(([c]) => c);
-  const current = sorted.map(([, v]) => v as number);
-  const forecast = current.map(v => v + Math.round(v * 0.12));
+  const labels = Object.keys(comp);
+  const current = Object.values(comp) as number[];
 
-  // Build both charts (unchanged)
+  // Forecast using enhanced category rules
+  const forecast = labels.map((name, i) => {
+    const val = current[i];
+    const lower = name.toLowerCase();
+
+    if (lower.includes("ai") || lower.includes("data")) return Math.round(val * 1.15);
+    if (lower.includes("cyber")) return Math.round(val * 1.12);
+    if (lower.includes("software") || lower.includes("dev")) return Math.round(val * 1.10);
+    if (lower.includes("qa") || lower.includes("test")) return Math.round(val * 1.08);
+
+    return Math.round(val * 1.05); // generic growth
+  });
+
+  Chart.getChart('forecastTopCompanies')?.destroy();
   new Chart('forecastTopCompanies', {
     type: 'bar',
-    data: { labels, datasets: [{ data: forecast, backgroundColor: '#6A1B9A' }] }
+    data: { labels, datasets: [{ label: 'Forecast', data: forecast, backgroundColor: '#6A1B9A' }] }
   });
 
+  Chart.getChart('trendTopCompanies')?.destroy();
   new Chart('trendTopCompanies', {
     type: 'line',
-    data: { labels, datasets: [
-      { label: 'Current', data: current, borderColor: '#039BE5', fill: false },
-      { label: 'Forecast', data: forecast, borderColor: '#6A1B9A', borderDash: [6, 6], fill: false }
-    ] }
+    data: {
+      labels,
+      datasets: [
+        { label: 'Current', data: current, borderColor: '#039BE5', fill: false },
+        { label: 'Forecast', data: forecast, borderColor: '#6A1B9A', borderDash: [6, 6], fill: false }
+      ]
+    }
   });
 
-  // 📌 Generate automated explanatory paragraph
-  if (labels.length > 0) {
-    const top1 = labels[0];
-    const top2 = labels[1] ?? null;
-    const rising = top2 ? `${top1} and ${top2}` : top1;
+  // Dynamic Description
+  const topIndex = forecast.indexOf(Math.max(...forecast));
+  const topCompany = labels[topIndex];
+  const mid = labels.slice(1, 5).join(', ');
+  const low = labels.slice(-4).join(', ');
 
-    const avgCurrent = current.reduce((a, b) => a + b, 0) / current.length;
-    const avgFuture = forecast.reduce((a, b) => a + b, 0) / forecast.length;
-    const delta = avgFuture - avgCurrent;
-
-    const trendText =
-      delta > 4 ? 'strong upward hiring momentum' :
-      delta > 1 ? 'moderate hiring expansion' :
-      delta > 0 ? 'stabilizing recruitment pattern' :
-      'noticeable decline in demand';
-
-    this.companyPredictionText =
-      `Forecast projections indicate that ${rising} are expected to remain the leading recruiters of GHU graduates next year. ` +
-      `The overall hiring ecosystem shows ${trendText}, driven by increasing industry alignment with alumni profiles. ` +
-      `These predictions suggest highly favorable placement opportunities across top hiring partners in the coming academic cycle.`;
-  } else {
-    this.companyPredictionText = 'Not enough hiring distribution data available to generate a company-level forecast.';
-  }
+  this.companyPredictionText =
+    `Projected hiring activity is highest for ${topCompany}, indicating strong forward representation among alumni. `
+    + `Other influential employers include ${mid}, showing steady upward movement. `
+    + `Lower-volume organizations such as ${low} show minimal change, maintaining stable hiring patterns. `
+    + `Overall, the distribution suggests continued dominance among leading recruiters next year.`;
 }
 
 renderPredictTopMajors() {
   const data = this.countBy('Major');
   const labels = Object.keys(data);
   const current = Object.values(data) as number[];
-  const forecast = current.map(v => v + Math.round(v * 0.10));
 
+  const forecast = labels.map((major, i) => {
+    const val = current[i];
+    const lower = major.toLowerCase();
+
+    if (lower.includes("ai") || lower.includes("machine")) return Math.round(val * 1.20);
+    if (lower.includes("data")) return Math.round(val * 1.18);
+    if (lower.includes("cyber")) return Math.round(val * 1.15);
+    if (lower.includes("software") || lower.includes("computer")) return Math.round(val * 1.12);
+    if (lower.includes("cloud") || lower.includes("devops")) return Math.round(val * 1.10);
+    if (lower.includes("information") || lower.includes("mis") || lower.includes("it")) return Math.round(val * 1.06);
+
+    return Math.round(val * 1.04);
+  });
+
+  Chart.getChart('forecastMajorEmployment')?.destroy();
   new Chart('forecastMajorEmployment', {
     type: 'bar',
-    data: { labels, datasets: [{ data: forecast, backgroundColor: '#FB8C00' }] }
+    data: { labels, datasets: [{ label: 'Forecast', data: forecast, backgroundColor: '#FB8C00' }] }
   });
 
+  Chart.getChart('trendMajorEmployment')?.destroy();
   new Chart('trendMajorEmployment', {
     type: 'line',
-    data: { labels, datasets: [
-      { label: 'Current', data: current, borderColor: '#FB8C00', fill: false },
-      { label: 'Forecast', data: forecast, borderColor: '#6A1B9A', borderDash: [6, 6], fill: false }
-    ] }
+    data: {
+      labels,
+      datasets: [
+        { label: 'Current', data: current, borderColor: '#FB8C00', fill: false },
+        { label: 'Forecast', data: forecast, borderColor: '#6A1B9A', borderDash: [6, 6], fill: false }
+      ]
+    }
   });
 
-  if (labels.length > 0) {
-    const sorted = labels.map((m, i) => ({ major: m, growth: forecast[i] - current[i] }))
-                         .sort((a, b) => b.growth - a.growth);
-    const topMajor = sorted[0].major;
-    const runner = sorted[1]?.major;
+  // Dynamic Description
+  const topIndex = forecast.indexOf(Math.max(...forecast));
+  const topMajor = labels[topIndex];
 
-    this.majorPredictionText =
-      `Employment trends strongly favor graduates from ${topMajor}, indicating its continued dominance in the job market next year. ` +
-      `${runner ? `${runner} also demonstrates solid upward mobility, reinforcing its relevance in industry demand. ` : ''}` +
-      `Overall, the academic–industry skill match suggests sustained pathways for students within technology and data-oriented domains.`;
-  } else {
-    this.majorPredictionText = 'Not enough major-level sample size to generate a predictive academic forecast.';
-  }
+  const rising = labels
+    .sort((a, b) => forecast[labels.indexOf(b)] - forecast[labels.indexOf(a)])
+    .slice(1, 5)
+    .join(', ');
+
+  const stable = labels.slice(-4).join(', ');
+
+  this.majorPredictionText =
+    `Among academic programs, ${topMajor} shows the strongest projected representation next year. `
+    + `Additional majors such as ${rising} demonstrate notable upward patterns in anticipated alumni distribution. `
+    + `Majors including ${stable} show smaller shifts, maintaining stable participation trends. `
+    + `The projection closely follows existing patterns while highlighting areas of notable growth.`;
 }
 
- renderPredictTopLocations() {
+renderPredictTopLocations() {
   const loc = this.countBy('Company Location');
   const labels = Object.keys(loc);
   const current = Object.values(loc) as number[];
-  const forecast = current.map(v => v + Math.round(v * 0.15));
 
+  const forecast = labels.map((location, i) => {
+    const val = current[i];
+    const lower = location.toLowerCase();
+
+    if (lower.includes("new york") || lower.includes("seattle") ||
+        lower.includes("san francisco") || lower.includes("austin"))
+      return Math.round(val * 1.15);
+
+    if (lower.includes("virginia") || lower.includes("dc") || lower.includes("boston"))
+      return Math.round(val * 1.12);
+
+    if (lower.includes("dallas") || lower.includes("chicago") || lower.includes("atlanta"))
+      return Math.round(val * 1.07);
+
+    if (lower.includes("remote") || lower.includes("hybrid"))
+      return Math.round(val * 1.05);
+
+    return Math.round(val * 1.06);
+  });
+
+  Chart.getChart('forecastLocations')?.destroy();
   new Chart('forecastLocations', {
     type: 'bar',
-    data: { labels, datasets: [{ data: forecast, backgroundColor: '#43A047' }] }
+    data: { labels, datasets: [{ label: 'Forecast', data: forecast, backgroundColor: '#43A047' }] }
   });
 
+  Chart.getChart('trendLocations')?.destroy();
   new Chart('trendLocations', {
     type: 'line',
-    data: { labels, datasets: [
-      { label: 'Current', data: current, borderColor: '#43A047', fill: false },
-      { label: 'Forecast', data: forecast, borderColor: '#6A1B9A', borderDash: [6, 6], fill: false }
-    ] }
+    data: {
+      labels,
+      datasets: [
+        { label: 'Current', data: current, borderColor: '#43A047', fill: false },
+        { label: 'Forecast', data: forecast, borderColor: '#6A1B9A', borderDash: [6, 6], fill: false }
+      ]
+    }
   });
 
-  if (labels.length > 0) {
-    const sorted = labels.map((loc, i) => ({ loc, growth: forecast[i] - current[i] }))
-                         .sort((a, b) => b.growth - a.growth);
+  // Dynamic Description
+  const topIndex = forecast.indexOf(Math.max(...forecast));
+  const topLocation = labels[topIndex];
 
-    const top = sorted[0].loc;
-    const second = sorted[1]?.loc;
+  const strong = labels.slice(1, 6).join(', ');
+  const lower = labels.slice(-4).join(', ');
 
-    this.locationPredictionText =
-      `Geographical forecasts reveal increasing job attraction in ${top}, positioning it as a primary destination for future GHU placements. ` +
-      `${second ? `${second} follows closely with strong hiring capacity and workplace expansion in emerging industries. ` : ''}` +
-      `Overall, relocation preferences and workforce mobility point toward sustained professional success in metropolitan and tech-centric labor markets.`;
-  } else {
-    this.locationPredictionText = 'Insufficient geographic hiring distribution to generate a forecast on alumni locations.';
-  }
+  this.locationPredictionText =
+    `Geographic forecasts show ${topLocation} as the leading region for projected alumni presence next year. `
+    + `Other key markets such as ${strong} also show upward growth patterns. `
+    + `Smaller regions including ${lower} display minimal fluctuations from current levels. `
+    + `The distribution highlights continued demand in major metropolitan and tech-oriented areas.`;
 }
 
 
-   
-
+  
 }

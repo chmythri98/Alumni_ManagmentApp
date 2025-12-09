@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  signInAnonymously,
   UserCredential
 } from '@angular/fire/auth';
 
@@ -19,6 +20,11 @@ export class AuthService {
   // Login existing user
   login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  // ⭐ Guest Login (Anonymous Sign-in)
+  guestLogin(): Promise<UserCredential> {
+    return signInAnonymously(this.auth);
   }
 
   // Logout

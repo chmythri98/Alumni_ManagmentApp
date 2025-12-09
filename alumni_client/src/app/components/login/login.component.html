@@ -5,11 +5,13 @@
       <h2>Welcome to Alumni Connect</h2>
     </div>
 
+    <!-- Email Input -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Email</mat-label>
       <input matInput type="email" [(ngModel)]="email" required />
     </mat-form-field>
 
+    <!-- Password Input -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Password</mat-label>
       <input
@@ -22,13 +24,12 @@
         mat-icon-button
         matSuffix
         (click)="hidePassword = !hidePassword"
-        [attr.aria-label]="'Hide or show password'"
-        [attr.aria-pressed]="!hidePassword"
       >
         <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </mat-form-field>
 
+    <!-- Login Button -->
     <button
       mat-raised-button
       color="primary"
@@ -39,10 +40,27 @@
       {{ loading ? 'Logging in...' : 'Login' }}
     </button>
 
-      <p class="register-link">
+    <!-- Register Link -->
+    <p class="register-link">
       Don’t have an account?
       <a routerLink="/register">Register here</a>
     </p>
-    
+
+    <hr />
+
+    <!-- ⭐ Guest Login Button -->
+    <button
+      mat-stroked-button
+      color="accent"
+      class="full-width"
+      (click)="guestLogin()"
+      [disabled]="loading"
+    >
+      👤 Continue as Guest
+    </button>
+
+    <p class="guest-info">
+      You can view the dashboard and explore the application without logging in. Please note, the Guest Login is only for project demonstration purpose.
+    </p>
   </mat-card>
 </div>

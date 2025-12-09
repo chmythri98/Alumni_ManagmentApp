@@ -347,132 +347,152 @@ export class EventsPageComponent implements OnInit {
       }
 
     } else if (panel === 'p2') {
-      // Q2: Graduation batch – line + doughnut
-      const gradYears = this.availableGradYears;
-      if (!gradYears.length) {
-        this.predictionTextP2 = 'Graduation year data is not available for prediction.';
-        return;
-      }
+  // -----------------------------
+  // P2: Graduation Batch Prediction (DATA-DRIVEN)
+  // -----------------------------
+  
+  const gradYears = this.availableGradYears;
+  if (!gradYears.length) {
+    this.predictionTextP2 = 'Graduation year data is not available for prediction.';
+    return;
+  }
 
-      const counts = gradYears.map(gy =>
-        this.eventAlumni.filter(a => a.graduationYear === gy).length
-      );
+  // 1) Count participation for each graduation year
+  const counts = gradYears.map(gy =>
+    this.eventAlumni.filter(a => a.graduationYear === gy).length
+  );
 
-      const forecastCounts = counts.map((c, idx) => {
-        const newest = Math.max(...gradYears);
-        const boost = gradYears[idx] >= newest - 1 ? 1.25 : 1.08;
-        return Math.round(c * boost);
-      });
-
-      this.createChart(forecastId, {
-        type: 'line',
-        data: {
-          labels: gradYears,
-          datasets: [{
-            label: 'Alumni Participation by Graduation Year',
-            data: counts,
-            borderColor: '#6a1b9a',
-            borderWidth: 3,
-            tension: 0.3
-          }]
-        }
-      });
-
-      this.createChart(trendId, {
-        type: 'doughnut',
-        data: {
-          labels: gradYears,
-          datasets: [{
-            label: 'Predicted Share Next Year',
-            data: forecastCounts,
-            backgroundColor: ['#6a1b9a', '#039BE5', '#43A047', '#FB8C00', '#8E24AA']
-          }]
-        }
-      });
-
-      // 🔍 Dynamic narrative for P2
-      const maxIndex = forecastCounts.indexOf(Math.max(...forecastCounts));
-      const topGradYear = gradYears[maxIndex];
-      const topForecastVal = forecastCounts[maxIndex];
-      const currentVal = counts[maxIndex] || 0;
-      const diff = topForecastVal - currentVal;
-      const pct = currentVal > 0 ? (diff / currentVal) * 100 : 0;
-
-      this.predictionTextP2 =
-        `Graduates from ${topGradYear} are projected to be the most active batch next year ` +
-        `with roughly ${topForecastVal} expected participants, an increase of about ${diff} ` +
-        `compared to current levels (~${pct.toFixed(1)}% growth).`;
-
-    } else if (panel === 'p3') {
-      // Q3: Overall growth – 3-year line forecast + polarArea for YoY growth
-      const participation = years.map(y =>
-        this.eventSummaries
-          .filter(e => e.year === y)
-          .reduce((a, b) => a + b.attendees, 0)
-      );
-
-      if (!participation.length) {
-        this.predictionTextP3 = 'Not enough participation history to build a multi-year forecast.';
-        return;
-      }
-
-      const changes = participation.slice(1).map((v, i) => v - participation[i]);
-      const avgGrowth = changes.length
-        ? changes.reduce((a, b) => a + b, 0) / changes.length
-        : 0;
-
-      const lastYear = years[years.length - 1];
-      const forecastYears = [lastYear + 1, lastYear + 2, lastYear + 3];
-      const forecastValues: number[] = [];
-      let lastVal = participation[participation.length - 1];
-
-      forecastYears.forEach(() => {
-        lastVal = Math.max(0, lastVal + avgGrowth);
-        forecastValues.push(lastVal);
-      });
-
-      this.createChart(forecastId, {
-        type: 'line',
-        data: {
-          labels: [...years, ...forecastYears],
-          datasets: [{
-            label: 'Historical + Forecasted Attendees',
-            data: [...participation, ...forecastValues],
-            borderColor: '#039BE5',
-            borderWidth: 3,
-            tension: 0.3,
-            fill: false
-          }]
-        }
-      });
-
-      this.createChart(trendId, {
-        type: 'polarArea',
-        data: {
-          labels: years.slice(1),
-          datasets: [{
-            label: 'Year-on-Year Growth',
-            data: changes.map(c => Math.max(c, 0)),
-            backgroundColor: ['#6a1b9a', '#039BE5', '#43A047', '#FB8C00', '#8E24AA']
-          }]
-        }
-      });
-
-      // 🔍 Dynamic narrative for P3
-      const nextYear = forecastYears[0];
-      const current = participation[participation.length - 1];
-      const nextVal = forecastValues[0];
-      const diff = nextVal - current;
-      const pct = current > 0 ? (diff / current) * 100 : 0;
-      const avgPct = current > 0
-        ? ((forecastValues[forecastValues.length - 1] - current) / current) * 100 / forecastYears.length
-        : 0;
-
-      this.predictionTextP3 =
-        `Overall alumni participation is forecasted to reach about ${Math.round(nextVal)} attendees in ${nextYear}, ` +
-        `which is roughly ${Math.round(diff)} more than the latest year (~${pct.toFixed(1)}% growth). ` +
-        `Across the next three years, the projected average annual growth rate is around ${avgPct.toFixed(1)}%.`;
+  // 2) Compute year-over-year growth rates based on REAL data
+  const growthRates: number[] = [];
+  for (let i = 1; i < counts.length; i++) {
+    const prev = counts[i - 1];
+    const curr = counts[i];
+    if (prev > 0) {
+      growthRates.push((curr - prev) / prev);  // Example: +0.12 = +12%
     }
+  }
+
+  // 3) Average growth rate (fallback 0 if insufficient data)
+  const avgGrowth =
+    growthRates.length > 0
+      ? growthRates.reduce((sum, r) => sum + r, 0) / growthRates.length
+      : 0;
+
+  // 4) Forecast next year's participation using the avg growth rate
+  const forecastCounts = counts.map(c =>
+    Math.round(c * (1 + avgGrowth))
+  );
+
+  // -----------------------------
+  // Line Chart: Historical participation by graduation year
+  // -----------------------------
+  this.createChart(forecastId, {
+    type: 'line',
+    data: {
+      labels: gradYears,
+      datasets: [{
+        label: 'Alumni Participation by Graduation Year',
+        data: counts,
+        borderColor: '#6a1b9a',
+        borderWidth: 3,
+        tension: 0.3
+      }]
+    }
+  });
+
+  // -----------------------------
+  // Doughnut Chart: Predicted participation next year
+  // -----------------------------
+  this.createChart(trendId, {
+    type: 'doughnut',
+    data: {
+      labels: gradYears,
+      datasets: [{
+        label: 'Predicted Participation (Next Year)',
+        data: forecastCounts,
+        backgroundColor: ['#6a1b9a', '#039BE5', '#43A047', '#FB8C00', '#8E24AA']
+      }]
+    }
+  });
+
+  // -----------------------------
+  // Narrative / Prediction Text
+  // -----------------------------
+  const maxIndex = forecastCounts.indexOf(Math.max(...forecastCounts));
+  const topGradYear = gradYears[maxIndex];
+  const topForecastVal = forecastCounts[maxIndex];
+  const currentVal = counts[maxIndex] || 0;
+  const diff = topForecastVal - currentVal;
+  const pct = currentVal > 0 ? (diff / currentVal) * 100 : 0;
+
+  this.predictionTextP2 =
+    `Based on historical trends, graduates from ${topGradYear} are projected to be the most active batch ` +
+    `with an estimated ${topForecastVal} participants next year. This reflects a change of ` +
+    `${diff >= 0 ? '+' : ''}${diff} attendees (~${pct.toFixed(1)}% growth).`;
+}
+
+
+     else if (panel === 'p3') {
+  // --- SIMPLE PREDICTION MODEL (Linear Growth) ---
+  
+  // Step 1: Calculate total participation per year
+  const participation = years.map(y =>
+    this.eventSummaries
+      .filter(e => e.year === y)
+      .reduce((a, b) => a + (b.attendees || 0), 0)
+  );
+
+  if (!participation.length) {
+    this.predictionTextP3 = 'Not enough participation history to build a forecast.';
+    return;
+  }
+
+  // Step 2: Year-over-year growth values
+  const changes = participation.slice(1).map((v, i) => v - participation[i]);
+
+  // Simple average of YoY changes (linear trend)
+  const avgGrowth = changes.length
+    ? changes.reduce((a, b) => a + b, 0) / changes.length
+    : 0;
+
+  // Step 3: Forecast next 3 years using linear trend
+  const lastYear = years[years.length - 1];
+  const forecastYears = [lastYear + 1, lastYear + 2, lastYear + 3];
+
+  let lastVal = participation[participation.length - 1];
+  const forecastValues = forecastYears.map(() => {
+    lastVal = lastVal + avgGrowth;
+    return Math.max(0, lastVal);
+  });
+
+  // Step 4: Forecast line chart
+  this.createChart(forecastId, {
+    type: 'line',
+    data: {
+      labels: [...years, ...forecastYears],
+      datasets: [{
+        label: 'Historical + Forecasted Attendees',
+        data: [...participation, ...forecastValues],
+        borderColor: '#039BE5',
+        borderWidth: 3,
+        tension: 0.3,
+        fill: false
+      }]
+    }
+  });
+
+  // Step 5: Simple prediction text
+  const current = participation[participation.length - 1];
+  const nextVal = forecastValues[0]; // next year's forecast
+  const nextYear = forecastYears[0];
+  const diff = nextVal - current;
+  const pct = current > 0 ? (diff / current) * 100 : 0;
+
+  this.predictionTextP3 =
+    `Based on recent year-to-year 2 changes, alumni participation is expected to be around ${Math.round(nextVal)} attendees in ${nextYear}. ` +
+    `This reflects a change of ${diff >= 0 ? '+' : ''}${Math.round(diff)} attendees (${pct.toFixed(1)}% growth).`;
+}
+
   }
 
 }

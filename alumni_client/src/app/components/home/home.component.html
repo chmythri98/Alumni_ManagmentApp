@@ -1,12 +1,17 @@
 <div class="dashboard">
 
   <!-- Header -->
-  <div class="header">
-    <h2>Welcome to your Alumni Dashboard 🎓</h2>
-    <p *ngIf="userEmail">
-      Logged in as <strong>{{ userEmail }}</strong>
-    </p>
-  </div>
+<div class="header">
+  <h2>
+    Welcome 
+    <span *ngIf="userEmail; else guest"> {{ userEmail }}</span>
+    <ng-template #guest>Guest User 🎓</ng-template>
+  </h2>
+
+  <p *ngIf="userEmail">
+    Logged in as <strong>{{ userEmail }}</strong>
+  </p>
+</div>
 
   <!-- =======================
         KPI STAT CARDS

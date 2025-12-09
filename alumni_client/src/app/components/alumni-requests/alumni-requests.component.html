@@ -1,6 +1,18 @@
 <div class="requests-header">
   <h2>📋 Alumni Profile Update Requests</h2>
 
+  <!-- ✨ Info line about Google Form source -->
+  <p class="form-note">
+    These update requests are submitted by alumni through the official
+    Profile Update Request Form:
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSdhwUDyH4dMj8HlBqmogqzD4DQq2dgaWI0IDACfjBSW8xiG6A/viewform?usp=dialog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Click here to open the Google Form
+    </a>.
+  </p>
 
   <div class="search-container">
     <input
@@ -13,26 +25,26 @@
 </div>
 
 <mat-card>
-<div *ngIf="filteredRequests.length === 0" class="empty-state">
-  No requests found.
-</div>
+  <div *ngIf="filteredRequests.length === 0" class="empty-state">
+    No requests found.
+  </div>
 
-<div class="requests-grid">
-  <mat-card *ngFor="let req of filteredRequests" class="request-card">
-    <div class="request-header">
-      <h3>{{ req['First Name'] }} {{ req['Last Name'] }}</h3>
-      <span class="status" [ngClass]="req.Status?.toLowerCase() || 'pending'">
-        {{ req.Status || 'Pending' }}
-      </span>
-    </div>
-    <p><b>Student ID:</b> {{ req['Student ID'] }}</p>
-    <p><b>Major:</b> {{ req['Major'] }}</p>
-    <p><b>Company:</b> {{ req['Company Name'] }}</p>
-    <button mat-stroked-button color="primary" (click)="openRequest(req)">
-      Open Request
-    </button>
-  </mat-card>
-  
-</div>
+  <div class="requests-grid">
+    <mat-card *ngFor="let req of filteredRequests" class="request-card">
+      <div class="request-header">
+        <h3>{{ req['First Name'] }} {{ req['Last Name'] }}</h3>
+        <span class="status" [ngClass]="req.Status?.toLowerCase() || 'pending'">
+          {{ req.Status || 'Pending' }}
+        </span>
+      </div>
 
+      <p><b>Student ID:</b> {{ req['Student ID'] }}</p>
+      <p><b>Major:</b> {{ req['Major'] }}</p>
+      <p><b>Company:</b> {{ req['Company Name'] }}</p>
+
+      <button mat-stroked-button color="primary" (click)="openRequest(req)">
+        Open Request
+      </button>
+    </mat-card>
+  </div>
 </mat-card>

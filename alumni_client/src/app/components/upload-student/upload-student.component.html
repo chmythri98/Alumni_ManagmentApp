@@ -1,4 +1,4 @@
-<div class="upload-container">
+<!-- <div class="upload-container">
   <h2>📤 Upload Student Data to Firestore</h2>
 
   <input type="file" (change)="onFileChange($event)" accept=".xlsx, .xls" />
@@ -42,4 +42,24 @@
   </div>
 
   <p *ngIf="uploadMessage" class="message">{{ uploadMessage }}</p>
+</div> -->
+
+
+<div style="padding: 20px;">
+  <h2>Update Graduation Year (2024 → 2025)</h2>
+
+  <button 
+    (click)="updateGraduationYear()" 
+    [disabled]="isLoading" 
+    style="padding: 10px 18px; background:#673ab7; color:white; border:none; border-radius:4px; cursor:pointer;">
+    Update First 60 Records
+  </button>
+
+  <div *ngIf="isLoading" style="margin-top: 15px;">
+    Updating records... please wait.
+  </div>
+
+  <div *ngIf="updatedCount > 0 && !isLoading" style="margin-top: 15px; color:green;">
+    {{ updatedCount }} records successfully updated!
+  </div>
 </div>
